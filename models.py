@@ -17,12 +17,20 @@ class Net1(ModelDesc):
     def __init__(self):
         pass
 
+    """
     def _get_inputs(self):
         return [InputDesc(tf.float32, (None, None, hp.default.n_mfcc), 'x_mfccs'),
                 InputDesc(tf.int32, (None, None,), 'y_ppgs')]
+    """
 
-    def _build_graph(self, inputs):
-        self.x_mfccs, self.y_ppgs = inputs
+    def inputs(self):
+        return [tf.TensorSpec([None, None, hp.default.n_mfcc], tf.float32, 'x_mfccs'),
+                tf.TensorSpec([None, None,], tf.int32, 'y_ppgs')]
+
+    #def _build_graph(self, inputs):
+    def build_graph(self, image, label):
+        self.x_mfccs = image
+        self.y_ppgs = label
         is_training = get_current_tower_context().is_training
         with tf.variable_scope('net1'):
             self.ppgs, self.preds, self.logits = self.network(self.x_mfccs, is_training)
@@ -42,7 +50,10 @@ class Net1(ModelDesc):
             tf.reshape(self.y_ppgs, shape=(tf.size(self.y_ppgs),), name='net1/eval/y_ppg_1d')
             tf.reshape(self.preds, shape=(tf.size(self.preds),), name='net1/eval/pred_ppg_1d')
 
-    def _get_optimizer(self):
+        return self.loss()
+
+    #def _get_optimizer(self):
+    def optimizer(self):
         lr = tf.get_variable('learning_rate', initializer=hp.train1.lr, trainable=False)
         return tf.train.AdamOptimizer(lr)
 
