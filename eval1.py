@@ -32,6 +32,7 @@ def eval(logdir):
     df = Net1DataFlow(hp.test1.data_path, hp.test1.batch_size)
 
     ckpt = tf.train.latest_checkpoint(logdir)
+    assert ckpt != None
 
     pred_conf = PredictConfig(
         model=model,
@@ -50,6 +51,7 @@ def eval(logdir):
     pred_ppg_1d = [idx2phn[i] for i in pred_ppg_1d]
     summ_cm = plot_confusion_matrix(y_ppg_1d, pred_ppg_1d, phns)
 
+    print('Tensorboard logdir: ' + logdir)
     writer = tf.summary.FileWriter(logdir)
     writer.add_summary(summ_loss)
     writer.add_summary(summ_acc)
