@@ -94,15 +94,27 @@ class Net1(ModelDesc):
 
 class Net2(ModelDesc):
 
+    """
     def _get_inputs(self):
         n_timesteps = (hp.default.duration * hp.default.sr) // hp.default.hop_length + 1
 
         return [InputDesc(tf.float32, (None, n_timesteps, hp.default.n_mfcc), 'x_mfccs'),
                 InputDesc(tf.float32, (None, n_timesteps, hp.default.n_fft // 2 + 1), 'y_spec'),
                 InputDesc(tf.float32, (None, n_timesteps, hp.default.n_mels), 'y_mel'), ]
+    """
 
-    def _build_graph(self, inputs):
-        self.x_mfcc, self.y_spec, self.y_mel = inputs
+    def inputs(self):
+        n_timesteps = (hp.default.duration * hp.default.sr) // hp.default.hop_length + 1
+        return [tf.TensorSpec([None, n_timesteps, hp.default.n_mfcc], tf.float32, 'x_mfccs'),
+            tf.TensorSpec([None, n_timesteps, hp.default.n_fft // 2 + 1], tf.float32, 'y_spec'),
+            tf.TensorSpec([None, n_timesteps, hp.default.n_mels], tf.float32, 'y_mel'), ]
+
+    #def _build_graph(self, inputs):
+    def build_graph(self, image, y_spec, y_mel):
+        #self.x_mfcc, self.y_spec, self.y_mel = inputs
+        self.x_mfcc = image
+        self.y_spec = y_spec
+        self.y_mel = y_mel
 
         is_training = get_current_tower_context().is_training
 
@@ -125,7 +137,10 @@ class Net2(ModelDesc):
         if not is_training:
             tf.summary.scalar('net2/eval/summ_loss', self.cost)
 
-    def _get_optimizer(self):
+        return self.loss()            
+
+    #def _get_optimizer(self):
+    def optimizer(self):
         gradprocs = [
             tensorpack_extension.FilterGradientVariables('.*net2.*', verbose=False),
             gradproc.MapGradient(

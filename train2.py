@@ -14,6 +14,7 @@ from tensorpack.tfutils.sessinit import SaverRestore
 from tensorpack.train.interface import TrainConfig
 from tensorpack.train.interface import launch_train_with_config
 from tensorpack.train.trainers import SyncMultiGPUTrainerReplicated
+from tensorpack.train.trainers import SyncMultiGPUTrainer
 from tensorpack.utils import logger
 
 from data_load import Net2DataFlow
@@ -62,7 +63,8 @@ def train(args, logdir1, logdir2):
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
         train_conf.nr_tower = len(args.gpu.split(','))
 
-    trainer = SyncMultiGPUTrainerReplicated(hp.train2.num_gpu)
+    #trainer = SyncMultiGPUTrainerReplicated(hp.train2.num_gpu)
+    trainer = SyncMultiGPUTrainer(hp.train2.num_gpu)
 
     launch_train_with_config(train_conf, trainer=trainer)
 

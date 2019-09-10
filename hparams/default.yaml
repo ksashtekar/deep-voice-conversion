@@ -49,7 +49,7 @@ train1:
 ---
 train2:
     # path
-    data_path: '/data/private/vc/datasets/arctic/slt/*.wav'
+    data_path: '/data/private/vc/datasets/cmu_us_slt_arctic-0.95-release/cmu_us_slt_arctic/wav/*.wav'
 
     # model
     hidden_units: 256  # alias: E
@@ -82,7 +82,7 @@ test1:
 ---
 test2:
     # path
-    data_path: '/data/private/vc/datasets/arctic/slt/*.wav'
+    data_path: '/data/private/vc/datasets/cmu_us_slt_arctic-0.95-release/cmu_us_slt_arctic/wav/*.wav'
 
     # test
     batch_size: 32
