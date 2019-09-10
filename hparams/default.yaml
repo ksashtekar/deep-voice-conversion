@@ -89,7 +89,7 @@ test2:
 ---
 convert:
     # path
-    data_path: '/data/private/vc/datasets/arctic/bdl/*.wav'
+    data_path: '/data/private/vc/datasets/cmu_us_bdl_arctic-0.95-release/cmu_us_bdl_arctic/wav/*.wav'
 
     # convert
     one_full_wav: False
