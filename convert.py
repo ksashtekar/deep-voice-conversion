@@ -75,7 +75,7 @@ def get_eval_input_names():
 
 
 def get_eval_output_names():
-    return ['pred_spec', 'y_spec', 'ppgs']
+    return ['pred_spec', 'y_spec', 'ppgs', 'pred_mel']
 
 
 def do_convert(args, logdir1, logdir2):
@@ -98,8 +98,9 @@ def do_convert(args, logdir1, logdir2):
         session_init=ChainInit(session_inits))
     predictor = OfflinePredictor(pred_conf)
 
+    # mfccs, mag_db, mel_db
     pr, y_s, pp = next(df().get_data())
-    pred_spec, y_spec, ppgs = predictor(pr, y_s, pp)
+    pred_spec, y_spec, ppgs, pred_mel = predictor(pr, y_s, pp)
     audio, y_audio, ppgs = convert(predictor, df, pred_spec, y_spec, ppgs)
 
     # Write the result
