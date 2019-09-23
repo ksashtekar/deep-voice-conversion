@@ -103,11 +103,8 @@ def do_convert(args, logdir1, logdir2):
     pred_spec, y_spec, ppgs, pred_mel = predictor(pr, y_s, pp)
 
     # Added for testing.
-    numpy_arr = pred_spec.data.cpu()
-    np.save("/dev/shm/pred_spec.npy", numpy_arr)
-    numpy_arr = pred_mel.data.cpu()
-    np.save("/dev/shm/pred_mel.npy", numpy_arr)
-
+    np.save("/dev/shm/pred_spec.npy", pred_spec)
+    np.save("/dev/shm/pred_mel.npy", pred_mel)
 
     audio, y_audio, ppgs = convert(predictor, df, pred_spec, y_spec, ppgs)
 
