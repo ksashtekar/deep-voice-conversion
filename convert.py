@@ -101,6 +101,14 @@ def do_convert(args, logdir1, logdir2):
     # mfccs, mag_db, mel_db
     pr, y_s, pp = next(df().get_data())
     pred_spec, y_spec, ppgs, pred_mel = predictor(pr, y_s, pp)
+
+    # Added for testing.
+    numpy_arr = pred_spec.data.cpu()
+    np.save("/dev/shm/pred_spec.npy", numpy_arr)
+    numpy_arr = pred_mel.data.cpu()
+    np.save("/dev/shm/pred_mel.npy", numpy_arr)
+
+
     audio, y_audio, ppgs = convert(predictor, df, pred_spec, y_spec, ppgs)
 
     # Write the result

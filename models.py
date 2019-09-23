@@ -128,6 +128,7 @@ class Net2(ModelDesc):
         with tf.variable_scope('net2'):
             self.pred_spec, self.pred_mel = self.network(self.ppgs, is_training)
         self.pred_spec = tf.identity(self.pred_spec, name='pred_spec')
+        self.pred_mel = tf.identity(self.pred_mel, name='pred_mel')
 
         self.cost = self.loss()
 
