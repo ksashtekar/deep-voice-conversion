@@ -18,6 +18,7 @@ from tensorpack.predict.config import PredictConfig
 from tensorpack.tfutils.sessinit import SaverRestore
 from tensorpack.tfutils.sessinit import ChainInit
 from tensorpack.callbacks.base import Callback
+import scipy
 
 
 # class ConvertCallback(Callback):
@@ -108,6 +109,15 @@ def do_convert(args, logdir1, logdir2):
     np.save("/dev/shm/pred_mel.npy", np.squeeze(pred_mel))
 
     audio, y_audio, ppgs = convert(predictor, df, pred_spec, y_spec, ppgs)
+
+    ###################
+    print(audio.shape)
+    print('Saving to wav files')
+    output_file = "/dev/shm/net2_audio.wav"
+    scipy.io.wavfile.write(output_file, hp.default.sr, audio[0])
+    output_file = "/dev/shm/net2_y_audio.wav"
+    scipy.io.wavfile.write(output_file, hp.default.sr, y_audio[0])
+    ###################
 
     # Write the result
     tf.summary.audio('A', y_audio, hp.default.sr, max_outputs=hp.convert.batch_size)
